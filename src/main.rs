@@ -161,22 +161,21 @@ struct Vertex {
 }
 implement_vertex!(Vertex, position);
 
+const FRAGMENT_SHADER: &'static str = include_str!("shader/march.glslf");
+const VERTEX_SHADER: &'static str = include_str!("shader/march.glslv");
 
 fn main() {
     let mut events_loop = glutin::EventsLoop::new();
     let window = glutin::WindowBuilder::new()
-        .with_title("Ray March".to_string())
+        .with_title("Raymarch".to_string())
         .with_dimensions((1024, 768).into());
     let context = glutin::ContextBuilder::new();
     let display = Display::new(window, context, &events_loop).unwrap();
 
-    let mut file = File::open("src/march.glslf").expect("No shader file");
-    let mut shader = String::new();
-    file.read_to_string(&mut shader).expect("Failed to read shader");
     let program = glium::Program::from_source(
         &display,
-        include_str!("march.glslv"),
-        &shader,
+        VERTEX_SHADER,
+        FRAGMENT_SHADER,
         None
     ).unwrap();
 
